@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ArunaPlants</string>
+    <string name="network_not_enabled">No network provider</string>
+    <string name="Cancel">Cancel</string>
+    <string name="mobile_network_not_enabled">Couldn\'t connect to internet. Check your connection.</string>
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
+</resources>
