@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity"
-    android:officer_id="@+officer_id/drawer_layout"
+    android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:officer_id="@+officer_id/toolbar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -26,7 +26,7 @@
             android:fitsSystemWindows="true"
             android:elevation="4dp">
             <EditText
-                android:officer_id="@+officer_id/search_txt"
+                android:id="@+id/search_txt"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:hint="Search"
@@ -55,32 +55,44 @@
                 android:paddingRight="15dp"
                 android:background="@drawable/rounded_corner_for_button_2"/>
         </android.support.v7.widget.Toolbar>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:background="@android:color/transparent">
+
+            <TextView
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="If the customer is not listed, click on Add Customer to add the new Customer"/>
+
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_above="@id/footer"
                 android:background="@android:color/transparent"
-                android:officer_id="@+officer_id/customers_recycler_view">
-
+                android:id="@+id/customers_recycler_view">
             </android.support.v7.widget.RecyclerView>
 
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:officer_id="@+officer_id/navogation_view"
+        android:id="@+id/navogation_view"
         android:layout_gravity ="start"
         app:menu="@menu/drawer_menu"
         android:fitsSystemWindows="true"
         app:itemTextColor="@color/colorPrimaryDark"
         android:background="@color/white">
         <RelativeLayout
-            android:officer_id="@+officer_id/mLyout"
+            android:id="@+id/mLyout"
             android:layout_marginTop="30dp"
             android:gravity="top"
             android:layout_width="match_parent"

@@ -56,7 +56,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:background="@drawable/rounded_corner_for_input">
-            <EditText android:officer_id="@+officer_id/input_username"
+            <EditText android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -78,7 +78,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:background="@drawable/rounded_corner_for_input">
-            <EditText android:officer_id="@+officer_id/input_password"
+            <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -90,7 +90,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
-            android:officer_id="@+officer_id/btn_login"
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
