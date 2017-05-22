@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.intelligentz.arunaplants.model.Customer;
 import com.intelligentz.arunaplants.R;
+import com.intelligentz.arunaplants.view.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +56,10 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
 
     }
 
+    public void collectPayment(int position){
+        ((MainActivity)activity).collectPayment(position);
+    }
+
     public class CustomerRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name_txt;
         TextView mobile_txt;
@@ -77,7 +82,7 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
 
         @Override
         public void onClick(View view) {
-
+            collectPayment(getAdapterPosition());
         }
     }
 }

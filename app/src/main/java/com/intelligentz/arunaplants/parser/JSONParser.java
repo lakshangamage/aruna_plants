@@ -6,6 +6,8 @@ package com.intelligentz.arunaplants.parser;
 
 import android.util.Log;
 
+import com.intelligentz.arunaplants.constants.Tags;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -166,6 +168,21 @@ public class JSONParser {
         }
 
         // return JSON String
+        try {
+            if (jObj == null || jObj.getString(Tags.TAG_MESSAGE) == null || jObj.getString(Tags.TAG_MESSAGE).isEmpty() ) {
+                jObj = new JSONObject();
+                jObj.put(Tags.TAG_MESSAGE,"Cannot connect to internet");
+                jObj.put(Tags.TAG_SUCCESS,0);
+            }
+        } catch (JSONException e) {
+            jObj = new JSONObject();
+            try {
+                jObj.put(Tags.TAG_MESSAGE,"Cannot connect to internet");
+                jObj.put(Tags.TAG_SUCCESS,0);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+        }
         return jObj;
 
     }

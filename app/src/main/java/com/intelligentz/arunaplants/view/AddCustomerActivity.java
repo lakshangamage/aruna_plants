@@ -1,5 +1,6 @@
 package com.intelligentz.arunaplants.view;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -185,7 +186,7 @@ public class AddCustomerActivity extends AppCompatActivity {
                 // getting product details by making HTTP request
                 JSONParser jsonParser = new JSONParser();
                 JSONObject json = jsonParser.makeHttpRequest(
-                        URL.LOGIN_URL, "POST", params);
+                        URL.ADD_CUSTOMER_URL, "POST", params);
 
                 // check your log for json response
                 Log.d("add customer attempt", json.toString());
@@ -219,11 +220,13 @@ public class AddCustomerActivity extends AppCompatActivity {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
                 progressDialog.dismissWithAnimation();
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
         };
         progressDialog.setTitleText("Success!")
-                .setContentText("Customer Successfullt Added")
+                .setContentText("Customer Successfully Added")
                 .setConfirmText("OK")
                 .setConfirmClickListener(successListner)
                 .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
