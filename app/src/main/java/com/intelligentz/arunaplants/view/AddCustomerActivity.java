@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -53,6 +56,12 @@ public class AddCustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
         context = this;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Add New Customer");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setElevation(0);
         nic_txt = (EditText) findViewById(R.id.input_nic);
         name_txt = (EditText) findViewById(R.id.input_name);
         birthday_txt = (EditText) findViewById(R.id.input_birthday);
@@ -116,17 +125,27 @@ public class AddCustomerActivity extends AppCompatActivity {
         }
     }
     private void updateBirthdayTxt() {
-        String myFormat = "dd/MM"; //In which you need put here
+        String myFormat = "MM-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         birthday_txt.setText(sdf.format(myCalendar.getTime()));
     }
-
-
     public boolean validate() {
         boolean valid = true;
         nic = nic_txt.getText().toString();
         name = name_txt.getText().toString();
         birthday = birthday_txt.getText().toString();
+        if (!birthday.isEmpty() && !nic.isEmpty()){
+            String yearS = nic.substring(0,2);
+            if (nic.length() == 10){
+                if (Integer.parseInt(yearS) < 17) {
+                    birthday = "20"+nic.substring(0,2)+"-"+birthday+" 00:00:00";
+                }else {
+                    birthday = "19"+nic.substring(0,2)+"-"+birthday+" 00:00:00";
+                }
+            }else {
+                birthday = nic.substring(0,4)+"-"+birthday+" 00:00:00";
+            }
+        }
         mobile = mobile_txt.getText().toString();
         address = address_txt.getText().toString();
 
@@ -148,7 +167,6 @@ public class AddCustomerActivity extends AppCompatActivity {
         }
         return valid;
     }
-
     class AddCustomer extends AsyncTask<String, String, String> {
         int success;
         boolean failure = false;
@@ -175,7 +193,6 @@ public class AddCustomerActivity extends AppCompatActivity {
                 // Building Parameters
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("nic", nic));
-                params.add(new BasicNameValuePair("name", name));
                 params.add(new BasicNameValuePair("name", name));
                 params.add(new BasicNameValuePair("birthday", birthday));
                 params.add(new BasicNameValuePair("mobile", mobile));
@@ -212,8 +229,6 @@ public class AddCustomerActivity extends AppCompatActivity {
             }
         }
     }
-
-
     public void onAddSuccess() {
 //        _loginButton.setEnabled(true);
         SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
@@ -232,7 +247,6 @@ public class AddCustomerActivity extends AppCompatActivity {
                 .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
     }
-
     public void onAddFailed() {
         SweetAlertDialog.OnSweetClickListener unsuccessListner = new SweetAlertDialog.OnSweetClickListener() {
             @Override
@@ -245,5 +259,14 @@ public class AddCustomerActivity extends AppCompatActivity {
                 .setConfirmText("OK")
                 .setConfirmClickListener(unsuccessListner)
                 .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

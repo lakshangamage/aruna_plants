@@ -46,6 +46,14 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
         holder.nic_txt.setText(customer.getNic());
         holder.mobile_txt.setText(customer.getMobile());
         holder.address_txt.setText(customer.getAddress());
+        if (MainActivity.type.equals("1")){
+            holder.officer_txt.setVisibility(View.VISIBLE);
+            holder.officer_txt.setText("officer: "+customer.getOfficer_name()+"("+customer.getOfficer_id()+")");
+        } else {
+            if (holder.officer_txt.getVisibility() != View.GONE) {
+                holder.officer_txt.setVisibility(View.GONE);
+            }
+        }
     }
     @Override
     public int getItemCount() {
@@ -65,6 +73,7 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
         TextView mobile_txt;
         TextView address_txt;
         TextView nic_txt;
+        TextView officer_txt;
         Button collect_btn;
         ArrayList<Customer> customerList = null;
         Context context = null;
@@ -76,6 +85,7 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
             mobile_txt = (TextView) itemView.findViewById(R.id.mobile_txt);
             address_txt = (TextView) itemView.findViewById(R.id.address_txt);
             nic_txt = (TextView) itemView.findViewById(R.id.nic_txt);
+            officer_txt = (TextView) itemView.findViewById(R.id.officer_txt);
             collect_btn = (Button) itemView.findViewById(R.id.collect_btn);
             collect_btn.setOnClickListener(this);
         }

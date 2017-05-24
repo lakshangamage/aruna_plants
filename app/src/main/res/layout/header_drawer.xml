@@ -16,7 +16,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:officer_id="@+officer_id/textlayout"
+                android:id="@+id/textlayout"
                 android:layout_alignParentBottom="true"
                 android:background="@color/white"
                 >
@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="GL/12/dfss"
-                    android:officer_id="@+officer_id/idTxt"
+                    android:id="@+id/idTxt"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="Officer Name"
-                    android:officer_id="@+officer_id/nameTxt"
+                    android:id="@+id/nameTxt"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimaryDark"
@@ -75,10 +75,10 @@
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/logo_transparent"
                 android:layout_centerInParent="true"
-                android:officer_id="@+officer_id/headerimage"
+                android:id="@+id/headerimage"
                 app:siBorderWidth="2dp"
                 app:siBorderColor="@color/white"
-                android:layout_above="@officer_id/textlayout"
+                android:layout_above="@id/textlayout"
                 />
         </RelativeLayout>
     </LinearLayout>

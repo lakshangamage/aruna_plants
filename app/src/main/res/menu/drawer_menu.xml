@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single"
-        android:officer_id="@+officer_id/menugroup">
-        <item android:officer_id="@+officer_id/add_customer_menu"
+        android:id="@+id/menugroup">
+        <item android:id="@+id/add_customer_menu"
             android:title="Add Customer"
             android:icon="@drawable/add_customer"
             android:onClick="jumptoaddcustomer">
         </item>
-        <item android:officer_id="@+officer_id/log_out_menu"
+        <item android:id="@+id/log_out_menu"
             android:title="Log Out"
             android:icon="@drawable/log_out_icon"
             android:onClick="logout">

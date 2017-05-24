@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="110dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:layout_margin="5dp"
     android:background="@color/colorCustomerBackground"
@@ -70,13 +70,14 @@
         android:textColor="@color/white"
         android:layout_toRightOf="@id/contact_icon"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="12dp"
         android:layout_marginRight="20dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_above="@id/address_txt"
+        android:layout_below="@id/nic_txt"
         android:textSize="14dp"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,12 +88,31 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_alignParentBottom="true"
         android:textSize="14dp"
+        android:layout_below="@id/mobile_txt"
+        android:layout_marginBottom="12dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/officer_txt"
+        android:text="01/gl/0001"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/contact_icon"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="14dp"
+        android:layout_below="@id/address_txt"
+        android:visibility="gone"
+        />
+
+
 
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->

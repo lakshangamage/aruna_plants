@@ -60,6 +60,8 @@ import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ADD_CUSTOMER_REQUEST_CODE = 123;
+    public static String id;
+    public static String type;
     int success;
     int previousLength = 0;
     private Toolbar toolbar;
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView officerIdTxt;
     private Context context;
     private SweetAlertDialog progressDialog;
-    public static String id;
     ArrayList<Customer> customerList;
     private CustomerRecyclerAdaptor customerRecyclerAdaptor;
     private Activity activity;
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isLogedIn = mPrefs.getBoolean("isLoggedIn", false);
         id = mPrefs.getString("id","");
         String name = mPrefs.getString("name","");
-        String type = mPrefs.getString("type","");
+        type = mPrefs.getString("type","");
 
         officerIdTxt.setText(id);
         officerNameTxt.setText(name);
@@ -254,6 +255,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_CUSTOMER_REQUEST_CODE);
     }
     public void logout(MenuItem item) {
+        SharedPreferences prefs = getSharedPreferences(
+                "arunaplant.username", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("isLoggedIn", false);
+        editor.commit();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
         finish();
     }
     class SearchCustomers extends AsyncTask<String, String, String> {
@@ -295,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
                 customerList = new ArrayList<>();
                 if (success == 1) {
-                    JSONArray users = json.getJSONArray("users");
+                    JSONArray users = json.getJSONArray("customers");
                     Customer customer = null;
                     for (int i = 0; i< users.length();i++){
                         String nic = ((JSONObject)(users.get(i))).getString("nic");
@@ -399,6 +407,9 @@ public class MainActivity extends AppCompatActivity {
             customerRecyclerAdaptor = new CustomerRecyclerAdaptor(searchCustomerList,context, activity);
             customerRecyclerView.setAdapter(customerRecyclerAdaptor);
             customerRecyclerView.setNestedScrollingEnabled(true);
+            if (swipeContainer != null && swipeContainer.isRefreshing()){
+                swipeContainer.setRefreshing(false);
+            }
         }
     }
     class MakePayment extends AsyncTask<String, String, String> {
@@ -426,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
                 params.add(new BasicNameValuePair("date", paymentDate));
                 params.add(new BasicNameValuePair("trans_id", transId));
                 params.add(new BasicNameValuePair("amount", String.valueOf(paymeentAmount)));
+                params.add(new BasicNameValuePair("officer_id", MainActivity.id));
 
                 Log.d("request!", "starting");
                 // getting product details by making HTTP request
