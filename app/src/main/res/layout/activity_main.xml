@@ -58,7 +58,13 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:background="@drawable/rounded_corner_for_button_2"/>
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0px"
+                android:layout_height="0px"/>
         </android.support.v7.widget.Toolbar>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -83,11 +89,7 @@
                 android:background="@android:color/transparent"
                 android:id="@+id/customers_recycler_view">
             </android.support.v7.widget.RecyclerView>
-            <LinearLayout
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_width="0px"
-                android:layout_height="0px"/>
+
 
         </RelativeLayout>
     </LinearLayout>

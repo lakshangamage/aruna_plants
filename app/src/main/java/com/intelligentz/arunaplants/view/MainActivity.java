@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     public void collectPayment(int position){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_make_payment);
+        dialog.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         TextView name_txt = (TextView) dialog.findViewById(R.id.name_txt);
         TextView nic_txt = (TextView) dialog.findViewById(R.id.nic_txt);
         TextView mobile_txt = (TextView) dialog.findViewById(R.id.mobile_txt);
@@ -174,9 +177,10 @@ public class MainActivity extends AppCompatActivity {
                 paymeentAmount = Double.parseDouble(amount);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date payDate;
                 try {
-                    payDate = df.parse(date);
+                    payDate = sdf.parse(date);
                     paymentDate = df.format(payDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -192,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
     public void updateDateTxt(EditText date_txt){
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         date_txt.setText(sdf.format(myCalendar.getTime()));
     }

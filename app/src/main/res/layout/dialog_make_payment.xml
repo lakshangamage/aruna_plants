@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,11 +22,11 @@
         android:layout_marginTop="20dp"
         android:id="@+id/contact_icon"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:tint="@color/colorPrimaryDark"
-        android:src="@drawable/user_icon"
+        android:src="@drawable/user_icon_dark"
         app:siBorderWidth="2dp"
         app:siBorderColor="@color/colorPrimaryDark"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         />
 
     <TextView
@@ -35,6 +39,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20dp"
         android:layout_marginTop="15dp"
+        android:layout_below="@id/contact_icon"
         />
 
     <TextView
@@ -47,6 +52,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="15dp"
         android:layout_marginTop="5dp"
+        android:layout_below="@id/name_txt"
         />
 
     <TextView
@@ -59,6 +65,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="15dp"
         android:layout_marginTop="15dp"
+        android:layout_below="@id/nic_txt"
         />
 
     <TextView
@@ -72,9 +79,11 @@
         android:textSize="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
+        android:layout_below="@id/mobile_txt"
         />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_lay_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -83,21 +92,26 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="@drawable/rounded_corner_for_input_dark">
+        android:background="@drawable/rounded_corner_for_input_dark"
+        android:layout_below="@id/address_txt"
+        android:theme="@style/EditTextHint">
         <EditText android:id="@+id/input_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="date"
+            android:ellipsize="end"
             android:hint="Date"
+            android:imeOptions="actionDone"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/colorPrimaryDark"
             android:layout_gravity="center"
             android:gravity="center"
             android:focusable="false"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/white"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_lay_trans_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -106,20 +120,24 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="@drawable/rounded_corner_for_input_dark">
+        android:background="@drawable/rounded_corner_for_input_dark"
+        android:layout_below="@id/input_lay_date"
+        android:theme="@style/EditTextHint">
         <EditText android:id="@+id/input_trans_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="Transaction ID"
+            android:imeOptions="actionDone"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/colorPrimaryDark"
             android:layout_gravity="center"
             android:gravity="center"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/white"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_lay_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -128,12 +146,16 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="@drawable/rounded_corner_for_input_dark">
+        android:background="@drawable/rounded_corner_for_input_dark"
+        android:layout_below="@id/input_lay_trans_id"
+        android:theme="@style/EditTextHint">
         <EditText android:id="@+id/input_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:hint="Amount"
+            android:imeOptions="actionDone"
+            android:ellipsize="end"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/colorPrimaryDark"
             android:layout_gravity="center"
@@ -141,11 +163,14 @@
             android:background="@android:color/transparent" />
     </android.support.design.widget.TextInputLayout>
     <RelativeLayout
+        android:id="@+id/btn_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/input_lay_amount"
+        android:layout_centerHorizontal="true">
         <Button
             android:id="@+id/cancel_btn"
             android:layout_width="100dp"
@@ -163,5 +188,10 @@
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@id/cancel_btn"/>
     </RelativeLayout>
-
-</LinearLayout>
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+</RelativeLayout>
+</ScrollView>
