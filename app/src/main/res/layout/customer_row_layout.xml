@@ -18,17 +18,7 @@
         android:src="@drawable/user_icon"
         app:siBorderWidth="2dp"
         app:siBorderColor="@color/white"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/customer_name"
-        android:text="Customer Name"
-        android:textColor="@color/white"
-        android:layout_toRightOf="@id/contact_icon"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="18dp"
+
         />
     <Button
         android:layout_width="wrap_content"
@@ -47,6 +37,21 @@
         android:maxLines="1"
         android:textSize="14dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customer_name"
+        android:text="Customer Name"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/contact_icon"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_toLeftOf="@id/collect_btn"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

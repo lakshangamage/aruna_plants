@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.intelligentz.arunaplants.model.Customer;
 import com.intelligentz.arunaplants.R;
 import com.intelligentz.arunaplants.view.MainActivity;
@@ -67,6 +68,9 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
     public void collectPayment(int position){
         ((MainActivity)activity).collectPayment(position);
     }
+    public void editCustomer(int position){
+        ((MainActivity)activity).editCustomer(position);
+    }
 
     public class CustomerRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name_txt;
@@ -75,6 +79,7 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
         TextView nic_txt;
         TextView officer_txt;
         Button collect_btn;
+        CircularImageView contact_icon;
         ArrayList<Customer> customerList = null;
         Context context = null;
         public CustomerRecyclerViewHolder(View itemView, Context context, ArrayList<Customer> customerList) {
@@ -88,11 +93,17 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
             officer_txt = (TextView) itemView.findViewById(R.id.officer_txt);
             collect_btn = (Button) itemView.findViewById(R.id.collect_btn);
             collect_btn.setOnClickListener(this);
+            contact_icon = (CircularImageView) itemView.findViewById(R.id.contact_icon);
+            contact_icon.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            collectPayment(getAdapterPosition());
+            if (view.getId() == collect_btn.getId()) {
+                collectPayment(getAdapterPosition());
+            } else if (view.getId() == contact_icon.getId()){
+                editCustomer(getAdapterPosition());
+            }
         }
     }
 }

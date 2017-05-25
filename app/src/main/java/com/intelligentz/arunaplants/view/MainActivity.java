@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -206,9 +207,12 @@ public class MainActivity extends AppCompatActivity {
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
+                        DisplayMetrics dm = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(dm);
+                        float density = dm.density;
                         Drawable img = context.getResources().getDrawable(
                                 R.drawable.search_icon);
-                        img.setBounds(0, 0, 60, 60);
+                        img.setBounds(0, 0, Math.round(18*density), Math.round(18*density));
 
                         search_txt.setCompoundDrawables(img, null, null, null);
                     }
@@ -268,6 +272,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void editCustomer(int position) {
+        Customer customer = searchCustomerList.get(position);
+        Intent intent = new Intent(MainActivity.this, EditCustomerActivity.class);
+        intent.putExtra("nic",customer.getNic());
+        intent.putExtra("name",customer.getName());
+        intent.putExtra("birthday",customer.getBirthday());
+        intent.putExtra("mobile",customer.getMobile());
+        intent.putExtra("address",customer.getAddress());
+        startActivityForResult(intent, ADD_CUSTOMER_REQUEST_CODE);
+    }
+
     class SearchCustomers extends AsyncTask<String, String, String> {
 
         boolean failure = false;

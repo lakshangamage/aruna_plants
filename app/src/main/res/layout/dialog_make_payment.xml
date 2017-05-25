@@ -177,6 +177,7 @@
             android:layout_height="40dp"
             android:background="@drawable/rounded_corner_for_button_dark"
             android:text="Cancel"
+            android:layout_marginRight="15dp"
             android:textAllCaps="false"/>
         <Button
             android:id="@+id/confirm_btn"
@@ -185,7 +186,7 @@
             android:background="@drawable/rounded_corner_for_button_dark"
             android:text="Confirm"
             android:textAllCaps="false"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="15dp"
             android:layout_toRightOf="@id/cancel_btn"/>
     </RelativeLayout>
     <LinearLayout
