@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
                     if (charSequence.length() > previousLength){
                         previousLength++;
                         for (Customer customer: new ArrayList<>(searchCustomerList)){
-                            if (!customer.getName().toLowerCase().contains(charSequence) || !customer.getNic().toLowerCase().contains(charSequence)){
+                            if (!customer.getName().toLowerCase().contains(charSequence) && !customer.getNic().toLowerCase().contains(charSequence)){
                                 searchCustomerList.remove(customer);
                             }
                         }
@@ -513,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
                             previousLength--;
                         searchCustomerList = new ArrayList<Customer>();
                         for (Customer customer: customerList){
-                            if (customer.getName().toLowerCase().contains(charSequence) | customer.getNic().toLowerCase().contains(charSequence) ){
+                            if (customer.getName().toLowerCase().contains(charSequence) || customer.getNic().toLowerCase().contains(charSequence) ){
                                 searchCustomerList.add(customer);
                             }
                         }

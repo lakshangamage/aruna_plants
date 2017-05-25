@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-            onLoginFailed();
+            //onLoginFailed();
             return;
         }
 
@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                 }else{
 
                     Log.d("Login Failure!", json.getString(Tags.TAG_MESSAGE));
-                    onLoginFailed();
+                    //onLoginFailed();
                     //Toast.makeText(Login.this, "Invalid login details", Toast.LENGTH_LONG).show();
 
                 }
