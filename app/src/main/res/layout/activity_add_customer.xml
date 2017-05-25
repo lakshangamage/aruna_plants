@@ -107,6 +107,7 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:focusable="false"
                 android:background="@android:color/transparent"/>
         </android.support.design.widget.TextInputLayout>
 

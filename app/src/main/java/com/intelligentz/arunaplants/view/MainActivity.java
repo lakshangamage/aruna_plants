@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
 
                 customerList = new ArrayList<>();
                 if (success == 1) {
-                    JSONArray users = json.getJSONArray("users");
+                    JSONArray users = json.getJSONArray("customers");
                     Customer customer = null;
                     for (int i = 0; i< users.length();i++){
                         String nic = ((JSONObject)(users.get(i))).getString("nic");
@@ -410,6 +410,8 @@ public class MainActivity extends AppCompatActivity {
             if (swipeContainer != null && swipeContainer.isRefreshing()){
                 swipeContainer.setRefreshing(false);
             }
+            previousLength = 0;
+            search_txt.setText("");
         }
     }
     class MakePayment extends AsyncTask<String, String, String> {
@@ -497,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
                 if (charSequence.length() > 0){
                     if (charSequence.length() > previousLength){
                         previousLength++;
-                        for (Customer customer: searchCustomerList){
+                        for (Customer customer: new ArrayList<>(searchCustomerList)){
                             if (!customer.getName().toLowerCase().contains(charSequence)){
                                 searchCustomerList.remove(customer);
                             }

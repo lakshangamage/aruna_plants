@@ -48,7 +48,7 @@ public class CustomerRecyclerAdaptor extends RecyclerView.Adapter<CustomerRecycl
         holder.address_txt.setText(customer.getAddress());
         if (MainActivity.type.equals("1")){
             holder.officer_txt.setVisibility(View.VISIBLE);
-            holder.officer_txt.setText("officer: "+customer.getOfficer_name()+"("+customer.getOfficer_id()+")");
+            holder.officer_txt.setText("Officer: "+customer.getOfficer_name()+"("+customer.getOfficer_id()+")");
         } else {
             if (holder.officer_txt.getVisibility() != View.GONE) {
                 holder.officer_txt.setVisibility(View.GONE);
