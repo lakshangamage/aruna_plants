@@ -1,5 +1,6 @@
 package com.intelligentz.arunaplants.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
+    int success;
     private static final int REQUEST_SIGNUP = 0;
     private SweetAlertDialog progressDialog;
     private Context context;
@@ -80,12 +82,24 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
 //        _loginButton.setEnabled(true);
+        progressDialog.dismissWithAnimation();
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        loginButton.setEnabled(true);
+        SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                progressDialog.dismissWithAnimation();
+                loginButton.setEnabled(true);
+            }
+        };
+        progressDialog.setTitleText("Failed!")
+            .setContentText("Invalid username or password.")
+            .setConfirmText("OK")
+            .setConfirmClickListener(successListner)
+            .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+
     }
 
     public boolean validate() {
@@ -124,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             // TODO Auto-generated method stub
             // Check for success tag
-            int success;
 
             try {
                 // Building Parameters
@@ -163,16 +176,15 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("type", type);
                     editor.commit();
                     startActivity(i);
-                    onLoginSuccess();
-                    return json.getString(Tags.TAG_MESSAGE);
+
                 }else{
 
                     Log.d("Login Failure!", json.getString(Tags.TAG_MESSAGE));
                     onLoginFailed();
                     //Toast.makeText(Login.this, "Invalid login details", Toast.LENGTH_LONG).show();
-                    return json.getString(Tags.TAG_MESSAGE);
 
                 }
+                return json.getString(Tags.TAG_MESSAGE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -183,10 +195,15 @@ public class LoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once product deleted
-            progressDialog.dismissWithAnimation();
-//            if (file_url != null){
+            //progressDialog.dismissWithAnimation();
+//            if (file_url == ""){
 //                Toast.makeText(LoginActivity.this, file_url, Toast.LENGTH_LONG).show();
 //            }
+            if (success == 0){
+                onLoginFailed();
+            } else {
+                onLoginSuccess();
+            }
 
         }
     }
