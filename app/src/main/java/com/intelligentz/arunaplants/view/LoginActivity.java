@@ -172,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("isLoggedIn", true);
                     editor.putString("id",id);
+                    editor.putString("password",password);
                     editor.putString("name", name);
                     editor.putString("type", type);
                     editor.commit();
@@ -199,12 +200,11 @@ public class LoginActivity extends AppCompatActivity {
 //            if (file_url == ""){
 //                Toast.makeText(LoginActivity.this, file_url, Toast.LENGTH_LONG).show();
 //            }
-            if (success == 0){
+            if (success != 1){
                 onLoginFailed();
             } else {
                 onLoginSuccess();
             }
-
         }
     }
 }

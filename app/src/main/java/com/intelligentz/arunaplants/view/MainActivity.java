@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.intelligentz.arunaplants.R;
 import com.intelligentz.arunaplants.adaptor.CustomerRecyclerAdaptor;
+import com.intelligentz.arunaplants.constants.Tags;
 import com.intelligentz.arunaplants.constants.URL;
 import com.intelligentz.arunaplants.model.Customer;
 import com.intelligentz.arunaplants.parser.JSONParser;
@@ -62,6 +63,8 @@ import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ADD_CUSTOMER_REQUEST_CODE = 123;
+    private String username;
+    private String password;
     public static String id;
     public static String type;
     int success;
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         configureSearchText();
         configureSwipeLayout();
         new SearchCustomers().execute();
+        new AttemptLogin().execute();
     }
     public void collectPayment(int position){
         final Dialog dialog = new Dialog(MainActivity.this);
@@ -572,5 +576,76 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         new SearchCustomersNoProgress().execute();
+    }
+    class AttemptLogin extends AsyncTask<String, String, String> {
+
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            SharedPreferences mPrefs = getSharedPreferences("arunaplant.username", Context.MODE_PRIVATE);
+            username = mPrefs.getString("id", "none");
+            password = mPrefs.getString("password", "none");
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            // Check for success tag
+
+            try {
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("username", username));
+                params.add(new BasicNameValuePair("password", password));
+
+                Log.d("request!", "starting");
+                // getting product details by making HTTP request
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest(
+                        URL.LOGIN_URL, "POST", params);
+
+                // check your log for json response
+                Log.d("Login attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(Tags.TAG_SUCCESS);
+                return json.getString(Tags.TAG_MESSAGE);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+            //progressDialog.dismissWithAnimation();
+//            if (file_url == ""){
+//                Toast.makeText(LoginActivity.this, file_url, Toast.LENGTH_LONG).show();
+//            }
+            if (success == 2){
+                onLoginFailed();
+            }
+        }
+    }
+
+    private void onLoginFailed(){
+        progressDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                progressDialog.dismissWithAnimation();
+                logout(null);
+            }
+        };
+        progressDialog.setTitleText("Password Changed!")
+                .setContentText("Your account password has reset. You will be logged out.")
+                .setConfirmText("OK")
+                .setConfirmClickListener(successListner)
+                .setCancelable(false);
+        progressDialog.show();
     }
 }
