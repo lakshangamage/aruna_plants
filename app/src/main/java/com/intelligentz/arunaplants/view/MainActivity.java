@@ -21,15 +21,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView officerIdTxt;
     private Context context;
     private SweetAlertDialog progressDialog;
+    private SweetAlertDialog loginprogressDialog;
     ArrayList<Customer> customerList;
     private CustomerRecyclerAdaptor customerRecyclerAdaptor;
     private Activity activity;
@@ -115,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_make_payment);
         dialog.getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
         TextView name_txt = (TextView) dialog.findViewById(R.id.name_txt);
         TextView nic_txt = (TextView) dialog.findViewById(R.id.nic_txt);
         TextView mobile_txt = (TextView) dialog.findViewById(R.id.mobile_txt);
@@ -122,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText date_txt = (EditText) dialog.findViewById(R.id.input_date);
         final EditText trans_id_txt = (EditText) dialog.findViewById(R.id.input_trans_id);
         final EditText amount_txt = (EditText) dialog.findViewById(R.id.input_amount);
-        Button cancel_button = (Button) dialog.findViewById(R.id.cancel_btn);
+        ImageView cancel_button = (ImageView) dialog.findViewById(R.id.cancel_btn);
         Button confirm_button = (Button) dialog.findViewById(R.id.confirm_btn);
 
         updateDateTxt(date_txt);
@@ -633,19 +642,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onLoginFailed(){
-        progressDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        loginprogressDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
         SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                progressDialog.dismissWithAnimation();
+                loginprogressDialog.dismissWithAnimation();
                 logout(null);
             }
         };
-        progressDialog.setTitleText("Password Changed!")
+        loginprogressDialog.setTitleText("Password Changed!")
                 .setContentText("Your account password has reset. You will be logged out.")
                 .setConfirmText("OK")
                 .setConfirmClickListener(successListner)
                 .setCancelable(false);
-        progressDialog.show();
+        loginprogressDialog.show();
     }
 }
