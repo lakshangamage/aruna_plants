@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,24 +24,27 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.intelligentz.arunaplants.R;
 import com.intelligentz.arunaplants.adaptor.CustomerRecyclerAdaptor;
+import com.intelligentz.arunaplants.constants.Common;
 import com.intelligentz.arunaplants.constants.Tags;
 import com.intelligentz.arunaplants.constants.URL;
 import com.intelligentz.arunaplants.model.Customer;
@@ -63,7 +68,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.intelligentz.arunaplants.constants.Tags.TAG_MESSAGE;
 import static com.intelligentz.arunaplants.constants.Tags.TAG_SUCCESS;
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ADD_CUSTOMER_REQUEST_CODE = 123;
@@ -97,9 +101,14 @@ public class MainActivity extends AppCompatActivity {
     private Button addCustomerButton;
 
     private Customer collectingCustomer;
+    private String[] billTypes;
     private double paymeentAmount;
     private String paymentDate;
     private String transId;
+    private String bill_type;
+    private boolean spinner_item_selected;
+    private boolean spinner_touched;
+    private TextView bill_type_txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +121,17 @@ public class MainActivity extends AppCompatActivity {
         configureRecyclerView();
         configureSearchText();
         configureSwipeLayout();
+        configureSpinner();
         new SearchCustomers().execute();
         new AttemptLogin().execute();
     }
+
+    private void configureSpinner() {
+        if (billTypes == null) {
+            billTypes = Common.bill_types;
+        }
+    }
+
     public void collectPayment(int position){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_make_payment);
@@ -128,11 +145,51 @@ public class MainActivity extends AppCompatActivity {
         TextView nic_txt = (TextView) dialog.findViewById(R.id.nic_txt);
         TextView mobile_txt = (TextView) dialog.findViewById(R.id.mobile_txt);
         TextView address_txt = (TextView) dialog.findViewById(R.id.address_txt);
+        final Spinner transaction_type_spinner = (Spinner) dialog.findViewById(R.id.spinner_trans_type);;
         final EditText date_txt = (EditText) dialog.findViewById(R.id.input_date);
         final EditText trans_id_txt = (EditText) dialog.findViewById(R.id.input_trans_id);
         final EditText amount_txt = (EditText) dialog.findViewById(R.id.input_amount);
         ImageView cancel_button = (ImageView) dialog.findViewById(R.id.cancel_btn);
         Button confirm_button = (Button) dialog.findViewById(R.id.confirm_btn);
+
+        spinner_item_selected = false;
+        spinner_touched = false;
+        final ArrayAdapter<String> transTypeAdaptor = new ArrayAdapter<String>(this,
+                R.layout.layout_spinner , billTypes){
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (!spinner_item_selected) {
+                    bill_type_txt = (TextView)v.findViewById(R.id.spinnerTarget);
+                    bill_type_txt.setText("Bill Type");
+                }
+                return v;
+            }
+        };
+        transaction_type_spinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!spinner_touched) {
+                    bill_type_txt.setText(billTypes[0]);
+                    spinner_item_selected = true;
+                    spinner_touched = true;
+                    transaction_type_spinner.setSelection(1);
+                }
+                return false;
+            }
+        });
+        transaction_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        transaction_type_spinner.setAdapter(transTypeAdaptor);
+
 
         updateDateTxt(date_txt);
 
@@ -176,7 +233,8 @@ public class MainActivity extends AppCompatActivity {
                 String amount = amount_txt.getText().toString();
                 String date = date_txt.getText().toString();
                 String trans_id = trans_id_txt.getText().toString();
-
+                String trans_type =(String) transaction_type_spinner.getSelectedItem();
+                bill_type = "0";
                 if (amount.isEmpty()){
                     amount_txt.setError("Enter payment amount");
                     return;
@@ -184,10 +242,15 @@ public class MainActivity extends AppCompatActivity {
                     date_txt.setError("Enter date");
                     return;
                 } else if(trans_id.isEmpty()){
-                    trans_id_txt.setError("Enter transaction Id");
+                    trans_id_txt.setError("Enter bill number");
+                    return;
+                } else if(trans_type == null || !spinner_item_selected){
+                    //trans_id_txt.setError("Select bill type");
+                    ((TextView) transaction_type_spinner.getSelectedView()).setTextColor(Color.RED);
+                    bill_type_txt.setError("Select bill type");
                     return;
                 }
-
+                bill_type = String.valueOf(transaction_type_spinner.getSelectedItemPosition());
                 paymeentAmount = Double.parseDouble(amount);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -349,6 +412,12 @@ public class MainActivity extends AppCompatActivity {
                         customer = new Customer(officer_id,officer_name,nic,name,address,birthday,mobile);
                         customerList.add(customer);
                     }
+                    JSONArray bill_types = json.getJSONArray("bill_types");
+                    billTypes = new String[bill_types.length()];
+                    for (int i = 0; i< bill_types.length();i++){
+                        billTypes[i] = bill_types.getString(i);
+                    }
+
                     return String.valueOf(json.getInt(TAG_SUCCESS));
                 }else{
                     Log.d("Login Failure!", json.getString(TAG_MESSAGE));
@@ -419,6 +488,11 @@ public class MainActivity extends AppCompatActivity {
                         customer = new Customer(officer_id,officer_name,nic,name,address,birthday,mobile);
                         customerList.add(customer);
                     }
+                    JSONArray bill_types = json.getJSONArray("bill_types");
+                    billTypes = new String[bill_types.length()];
+                    for (int i = 0; i< bill_types.length();i++){
+                        billTypes[i] = bill_types.getString(i);
+                    }
                     return String.valueOf(json.getInt(TAG_SUCCESS));
                 }else{
                     Log.d("Login Failure!", json.getString(TAG_MESSAGE));
@@ -471,6 +545,7 @@ public class MainActivity extends AppCompatActivity {
                 params.add(new BasicNameValuePair("nic", collectingCustomer.getNic()));
                 params.add(new BasicNameValuePair("date", paymentDate));
                 params.add(new BasicNameValuePair("trans_id", transId));
+                params.add(new BasicNameValuePair("trans_type", bill_type));
                 params.add(new BasicNameValuePair("amount", String.valueOf(paymeentAmount)));
                 params.add(new BasicNameValuePair("officer_id", MainActivity.id));
 
