@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.intelligentz.arunaplants.BuildConfig;
 import com.intelligentz.arunaplants.R;
 import com.intelligentz.arunaplants.constants.Tags;
 import com.intelligentz.arunaplants.constants.URL;
@@ -31,9 +33,11 @@ import java.util.ResourceBundle;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     int success;
+    private int version;
     private static final int REQUEST_SIGNUP = 0;
     private SweetAlertDialog progressDialog;
     private Context context;
@@ -102,6 +106,25 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public void onVersionFailed() {
+        SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                progressDialog.dismissWithAnimation();
+                loginButton.setEnabled(true);
+                Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
+                startActivity(intent);
+                finish();
+            }
+        };
+        progressDialog.setTitleText("New Version Available!")
+            .setContentText("A new version of the app is available. Please update to continue.")
+            .setConfirmText("OK")
+            .setConfirmClickListener(successListner)
+            .changeAlertType(SweetAlertDialog.WARNING_TYPE);
+
+    }
+
     public boolean validate() {
         boolean valid = true;
 
@@ -131,6 +154,7 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.getProgressHelper().setRimColor(R.color.colorPrimary);
             progressDialog.setCancelable(false);
             progressDialog.show();
+            version = BuildConfig.VERSION_CODE;
 
         }
 
@@ -144,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("username", username));
                 params.add(new BasicNameValuePair("password", password));
+                params.add(new BasicNameValuePair("version", String.valueOf(version)));
 
                 Log.d("request!", "starting");
                 // getting product details by making HTTP request
@@ -200,7 +225,9 @@ public class LoginActivity extends AppCompatActivity {
 //            if (file_url == ""){
 //                Toast.makeText(LoginActivity.this, file_url, Toast.LENGTH_LONG).show();
 //            }
-            if (success != 1){
+            if (success == 3){
+                onVersionFailed();
+            }else if (success != 1){
                 onLoginFailed();
             } else {
                 onLoginSuccess();

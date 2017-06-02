@@ -6,8 +6,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -42,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
+import com.intelligentz.arunaplants.BuildConfig;
 import com.intelligentz.arunaplants.R;
 import com.intelligentz.arunaplants.adaptor.CustomerRecyclerAdaptor;
 import com.intelligentz.arunaplants.constants.Common;
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ADD_CUSTOMER_REQUEST_CODE = 123;
     private String username;
     private String password;
+    private int version;
     public static String id;
     public static String type;
     int success;
@@ -671,6 +676,19 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences mPrefs = getSharedPreferences("arunaplant.username", Context.MODE_PRIVATE);
             username = mPrefs.getString("id", "none");
             password = mPrefs.getString("password", "none");
+//            PackageManager manager = context.getPackageManager();
+//            PackageInfo info = null;
+//            try {
+//                info = manager.getPackageInfo(
+//                        context.getPackageName(), 0);
+//            } catch (PackageManager.NameNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            if (info != null) {
+//                version = info.versionName;
+//            }
+
+            version = BuildConfig.VERSION_CODE;
         }
 
         @Override
@@ -683,6 +701,7 @@ public class MainActivity extends AppCompatActivity {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("username", username));
                 params.add(new BasicNameValuePair("password", password));
+                params.add(new BasicNameValuePair("version", String.valueOf(version)));
 
                 Log.d("request!", "starting");
                 // getting product details by making HTTP request
@@ -712,6 +731,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
             if (success == 2){
                 onLoginFailed();
+            } else if (success == 3){
+                onVersionFailed();
             }
         }
     }
@@ -727,6 +748,24 @@ public class MainActivity extends AppCompatActivity {
         };
         loginprogressDialog.setTitleText("Password Changed!")
                 .setContentText("Your account password has reset. You will be logged out.")
+                .setConfirmText("OK")
+                .setConfirmClickListener(successListner)
+                .setCancelable(false);
+        loginprogressDialog.show();
+    }
+
+    private void onVersionFailed(){
+        loginprogressDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
+                startActivity(intent);
+                finish();
+            }
+        };
+        loginprogressDialog.setTitleText("New Version Available")
+                .setContentText("A new version of the app is available. Please update to continue.")
                 .setConfirmText("OK")
                 .setConfirmClickListener(successListner)
                 .setCancelable(false);
