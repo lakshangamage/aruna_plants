@@ -3,6 +3,7 @@ package com.intelligentz.arunaplants.view;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -759,8 +760,15 @@ public class MainActivity extends AppCompatActivity {
         SweetAlertDialog.OnSweetClickListener successListner = new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
-                startActivity(intent);
+
+                Intent intent = null;
+                try {
+                    intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    intent = new Intent(Intent.ACTION_VIEW ,Uri.parse("https://play.google.com/store/apps/details?id=com.intelligentz.arunaplants&hl=en"));
+                    startActivity(intent);
+                }
                 finish();
             }
         };

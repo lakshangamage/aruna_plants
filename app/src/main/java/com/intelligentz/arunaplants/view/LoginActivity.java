@@ -2,6 +2,7 @@ package com.intelligentz.arunaplants.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -112,8 +113,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(SweetAlertDialog sweetAlertDialog) {
                 progressDialog.dismissWithAnimation();
                 loginButton.setEnabled(true);
-                Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
-                startActivity(intent);
+
+                Intent intent = null;
+                try {
+                    intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://details?id=com.intelligentz.arunaplants"));
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    intent = new Intent(Intent.ACTION_VIEW ,Uri.parse("https://play.google.com/store/apps/details?id=com.intelligentz.arunaplants&hl=en"));
+                    startActivity(intent);
+                }
                 finish();
             }
         };
